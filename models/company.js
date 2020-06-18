@@ -40,7 +40,6 @@ class Company {
 
     static async update(data, handle){
         const {query, values} = partialUpdate('companies', data, "handle",handle)
-        console.log(query, values);
         
         const updatedCompany = await db.query(`${query}`, values)
         return updatedCompany.rows[0]

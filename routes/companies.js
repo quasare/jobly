@@ -4,9 +4,6 @@ const router = new Router();
 // Json Schema validtor
 const {validate} = require("jsonschema");
 
-// Helper to validate patch request
-const partialUpdate = require('../helpers/partialUpdate')
-
 // Json schemas
 const companySchema = require("../schemas/company.json")
 const companyUpdateSchema = require("../schemas/companyUpdate.json")
@@ -15,7 +12,7 @@ const ExpressError = require('../helpers/expressError');
 
 // Company model 
 const Company = require('../models/company');
-const db = require('../db');
+
 
 
 // Start routes
