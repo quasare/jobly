@@ -1,0 +1,74 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "title": "The root schema",
+    "description": "The root schema comprises the entire JSON document.",
+    "default": {},
+    "examples": [
+        {
+            "handle": "msc",
+            "name": "Microsoft",
+            "num_employees": 72000,
+            "description": "Makers of windows os",
+            "logo_url": "https://images.unsplash.com/photo-1545231027-637d2f6210f8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
+        }
+    ],
+    "required": [
+        "handle",
+        "name"
+    ],
+    "additionalProperties": true,
+    "properties": {
+        "handle": {
+            "$id": "#/properties/handle",
+            "type": "string",
+            "title": "The handle schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "msc"
+            ]
+        },
+        "name": {
+            "$id": "#/properties/name",
+            "type": "string",
+            "title": "The name schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "Microsoft"
+            ]
+        },
+        "num_employees": {
+            "$id": "#/properties/num_employees",
+            "type": "integer",
+            "title": "The num_employees schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+                72000
+            ]
+        },
+        "description": {
+            "$id": "#/properties/description",
+            "type": "string",
+            "title": "The description schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "Makers of windows os"
+            ]
+        },
+        "logo_url": {
+            "$id": "#/properties/logo_url",
+            "type": "string",
+            "title": "The logo_url schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "https://images.unsplash.com/photo-1545231027-637d2f6210f8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
+            ]
+        }
+    }
+}

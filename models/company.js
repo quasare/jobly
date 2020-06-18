@@ -1,8 +1,8 @@
 const db = require("../db")
 const ExpressError = require("../helpers/expressError")
+const partialUpdate = require("../helpers/partialUpdate")
 
-
-
+// Company class
 class Company {
 
     static async create({
@@ -38,10 +38,19 @@ class Company {
         return company.rows[0]
     }
 
+    static async update(data, handle){
+        const {query, values} = partialUpdate('companies', data, "handle",handle)
+        console.log(query, values);
+        
+        const updatedCompany = await db.query(`${query}`, values)
+        return updatedCompany.rows[0]
+    }
+
     static async delete(handle){
         const company = await db.query(`
         DELETE FROM companies AS c WHERE c.handle = $1 `, [handle])
     }
+
 }
 
 

@@ -1,13 +1,30 @@
 const Router = require('express').Router;
 const router = new Router();
 
-const ExpressError = require('../helpers/expressError');
-const Company = require('../models/company');
+// Json Schema validtor
+const {validate} = require("jsonschema");
 
+// Helper to validate patch request
+const partialUpdate = require('../helpers/partialUpdate')
+
+// Json schemas
+const companySchema = require("../schemas/company.json")
+const companyUpdateSchema = require("../schemas/companyUpdate.json")
+
+const ExpressError = require('../helpers/expressError');
+
+// Company model 
+const Company = require('../models/company');
+const db = require('../db');
+
+
+// Start routes
 router.get('/', async (req, res, next) => {
 	try {
 		let companies = await Company.getAll();
-		return res.json({ companies });
+		return res.json({
+			companies
+		});
 	} catch (error) {
 		next(error);
 	}
@@ -15,14 +32,17 @@ router.get('/', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
 	try {
-		let newCompany = await Company.create({
-			handle         : req.body.handle,
-			name           : req.body.name,
-			num_empoloyees : req.body.num_employees,
-			description    : req.body.description,
-			logo_url       : req.body.logo_url
+		const validation = validate(req.body, companySchema)
+		if (!validation.valid) {
+			return next({
+				status: 400,
+				error: validation.errors.map(e => e.stack)
+			})
+		}
+		let newCompany = await Company.create(req.body);
+		return res.status(201).json({
+			company: newCompany
 		});
-		return res.json({ company: newCompany });
 	} catch (error) {
 		return next(error);
 	}
@@ -32,7 +52,9 @@ router.get('/:handle', async (req, res, next) => {
 	try {
 		const handle = req.params.handle;
 		let company = await Company.get(handle);
-		return res.json({ company: company });
+		return res.json({
+			company: company
+		});
 	} catch (error) {
 		next(error);
 	}
@@ -40,12 +62,32 @@ router.get('/:handle', async (req, res, next) => {
 
 router.patch('/:handle', async (req, res, next) => {
 	try {
-	} catch (error) {}
+		let update = req.body
+		let handle = req.params.handle
+		let validation = validate(update, companyUpdateSchema)
+		if (!validation.valid){
+			return next({
+				status: 400,
+				error: validation.errors.map(e => e.stack)
+			})
+		}
+		let result = await Company.update(req.body, handle)
+		return res.json({company: result})
+	} catch (error) {
+		next(error)
+	}
 });
 
 router.delete('/:handle', async (req, res, next) => {
 	try {
-	} catch (error) {}
+		handle = req.params.handle
+		result = await Company.delete(handle)
+		return res.json({
+			message: "Company Deleted"
+		})
+	} catch (error) {
+		next(error)
+	}
 });
 
 module.exports = router;
