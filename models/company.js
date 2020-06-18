@@ -8,7 +8,7 @@ class Company {
     static async create({
         handle,
         name,
-        num_empoloyees,
+        num_employees,
         description,
         logo_url
     }) {
@@ -21,7 +21,7 @@ class Company {
             logo_url
         )VALUES ($1, $2, $3, $4, $5)
         RETURNING handle, name, num_employees, description, logo_url
-        `, [handle, name, num_empoloyees, description, logo_url])
+        `, [handle, name, num_employees, description, logo_url])
         return result.rows[0]
     }
 
