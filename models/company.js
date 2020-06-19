@@ -32,10 +32,16 @@ class Company {
     }
 
     static async get(handle) {
-        const company = await db.query(`
+        const res = await db.query(`
             SELECT * FROM companies AS c WHERE c.handle = $1
         `, [handle])
-        return company.rows[0]
+
+        const company = res.rows[0]
+
+        const res2 = await db.query(`SELECT * FROM jobs WHERE jobs.company_handle = $1`, [handle])
+
+        company.jobs = res2.rows
+        return company
     }
 
     static async update(data, handle){

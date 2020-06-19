@@ -15,3 +15,13 @@ CREATE TABLE jobs (
     company_handle TEXT NOT NULL REFERENCES companies ON DELETE CASCADE, 
     date_posted TIMESTAMP
 );
+
+CREATE TABLE users (
+    username text PRIMARY KEY,
+    password text NOT NULL,
+    first_name text NOT NULL, 
+    last_name text NOT NULL, 
+    email VARCHAR NOT NULL UNIQUE,
+    photo_url text, 
+    is_admin boolean NOT NULL DEFAULT FALSE
+)
