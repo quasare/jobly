@@ -77,7 +77,7 @@ describe('Test jobs routes', () => {
         const res = await request(app).delete(`/jobs/${id}`)
 
         expect(res.body).toEqual({
-			message: "Company Deleted"
+			message: "Job Deleted"
 		})
 
 

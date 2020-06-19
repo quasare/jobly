@@ -81,7 +81,7 @@ router.delete('/:id', async (req, res, next) => {
         id = req.params.id
         result = await Job.delete(id)
         return res.json({
-			message: "Company Deleted"
+			message: "Job Deleted"
 		})
     } catch (error) {
         next(error)
