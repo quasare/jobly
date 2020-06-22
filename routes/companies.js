@@ -13,10 +13,11 @@ const ExpressError = require('../helpers/expressError');
 // Company model 
 const Company = require('../models/company');
 
+const {ensureLoggedIn, ensureIsAdmin} = require('../middleware/auth')
 
 
 // Start routes
-router.get('/', async (req, res, next) => {
+router.get('/', ensureLoggedIn, async (req, res, next) => {
 	try {
 		let companies = await Company.getAll();
 		return res.json({
@@ -27,7 +28,7 @@ router.get('/', async (req, res, next) => {
 	}
 });
 
-router.post('/', async (req, res, next) => {
+router.post('/', ensureIsAdmin, async (req, res, next) => {
 	try {
 		const validation = validate(req.body, companySchema)
 		if (!validation.valid) {
@@ -45,7 +46,7 @@ router.post('/', async (req, res, next) => {
 	}
 });
 
-router.get('/:handle', async (req, res, next) => {
+router.get('/:handle', ensureLoggedIn, async (req, res, next) => {
 	try {
 		const handle = req.params.handle;
 		let company = await Company.get(handle);
@@ -57,7 +58,7 @@ router.get('/:handle', async (req, res, next) => {
 	}
 });
 
-router.patch('/:handle', async (req, res, next) => {
+router.patch('/:handle', ensureIsAdmin, async (req, res, next) => {
 	try {
 		let update = req.body
 		let handle = req.params.handle
@@ -75,7 +76,7 @@ router.patch('/:handle', async (req, res, next) => {
 	}
 });
 
-router.delete('/:handle', async (req, res, next) => {
+router.delete('/:handle', ensureIsAdmin, async (req, res, next) => {
 	try {
 		handle = req.params.handle
 		result = await Company.delete(handle)

@@ -11,11 +11,13 @@ const jobUpdateSchema = require("../schemas/jobUpdate.json")
 
 const ExpressError = require('../helpers/expressError');
 
+const {ensureLoggedIn, ensureIsAdmin} = require('../middleware/auth')
+
 const Job = require('../models/job');
 const Company = require('../models/company');
 
 // Start routes
-router.get('/', async (req, res, next) => {
+router.get('/', ensureLoggedIn, async (req, res, next) => {
     try {
         const allJobs = await Job.getAll()
         return res.json({
@@ -26,7 +28,7 @@ router.get('/', async (req, res, next) => {
     }
 })
 
-router.post('/', async (req, res, next) => {
+router.post('/', ensureIsAdmin, async (req, res, next) => {
     try {
         let validation = validate(req.body, jobNewSchema)
         if (!validation.valid) {
@@ -44,7 +46,7 @@ router.post('/', async (req, res, next) => {
     }
 })
 
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', ensureLoggedIn, async (req, res, next) => {
     try {
         id = req.params.id
         const job = await Job.getById(id)
@@ -57,7 +59,7 @@ router.get('/:id', async (req, res, next) => {
 })
 
 
-router.patch('/:id', async (req, res, next) => {
+router.patch('/:id', ensureIsAdmin, async (req, res, next) => {
     try {
         const id = req.params.id
         const validation = validate(req.body, jobUpdateSchema)
@@ -76,7 +78,7 @@ router.patch('/:id', async (req, res, next) => {
 
 
 
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', ensureIsAdmin, async (req, res, next) => {
     try {
         id = req.params.id
         result = await Job.delete(id)

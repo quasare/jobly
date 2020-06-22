@@ -4,6 +4,7 @@ const partialUpdate = require("../helpers/partialUpdate")
 const bcrypt = require("bcrypt");
 const { BCRYPT_WORK_FACTOR } = require("../config");
 
+
 class User {
 
     static async create({
@@ -23,7 +24,7 @@ class User {
         email,
         photo_url,
         is_admin)
-        VALUES ($1,$2,$3,$4,$5, $6, $7) RETURNING username`, [username, hashedPassword, first_name, last_name, email, photo_url, is_admin])
+        VALUES ($1,$2,$3,$4,$5, $6, $7) RETURNING username, is_admin`, [username, hashedPassword, first_name, last_name, email, photo_url, is_admin])
         
         return newUser.rows[0]
     }

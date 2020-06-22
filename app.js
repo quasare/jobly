@@ -5,6 +5,7 @@ const express = require("express");
 const ExpressError = require("./helpers/expressError");
 
 const morgan = require("morgan");
+const {authenticateJWT} = require('./middleware/auth')
 
 const app = express();
 
@@ -18,6 +19,7 @@ const jobRoutes = require("./routes/jobs")
 const userRoutes = require("./routes/users")
 const authRoutes = require("./routes/auth")
 
+app.use(authenticateJWT)
 app.use('/companies', companyRoutes);
 app.use('/jobs', jobRoutes);
 app.use('/users', userRoutes);

@@ -1,6 +1,6 @@
 const Router = require('express').Router;
 const router = new Router();
-
+const jwt = require('jsonwebtoken')
 const ExpressError = require('../helpers/expressError');
 
 // Json Schema validtor
@@ -14,8 +14,12 @@ const userUpdateSchmea = require('../schemas/jobUpdate.json')
 const User = require('../models/user');
 const db = require('../db');
 
-// Start routes
-router.post('/', async (req, res, next ) => {
+const {ensureLoggedIn, ensureCorrectUser} = require('../middleware/auth');
+const { SECRET_KEY } = require('../config');
+
+// Start user routes
+
+router.post('/', async (req, res, next) => {
     try {
         const validation = validate(req.body, userNewSchmea)
         if (!validation.valid) {
@@ -24,14 +28,16 @@ router.post('/', async (req, res, next ) => {
                 error: validation.errors.map(e => e.stack)
             })
         }
-        let newUser = await User.create(req.body)
-        return res.json({user: newUser})
+        
+        let {username, is_admin} = await User.create(req.body)
+        let token = jwt.sign({username: username, is_admin: is_admin}, SECRET_KEY)
+        return res.json({token})
     } catch (error) {
         next(error)
     }
 })
 
-router.get('/', async (req, res, next ) => {
+router.get('/', ensureLoggedIn, async (req, res, next ) => {
     try {
         const allUsers = await User.getAll()
         return res.json({users: allUsers})
@@ -40,7 +46,7 @@ router.get('/', async (req, res, next ) => {
     }
 })
 
-router.get('/:username', async (req, res, next ) => {
+router.get('/:username',  async (req, res, next ) => {
     try {
         const user = await User.get(req.params.username)
         return res.json({user: user})
@@ -49,7 +55,7 @@ router.get('/:username', async (req, res, next ) => {
     }
 })
 
-router.patch('/:username', async (req, res, next ) => {
+router.patch('/:username', ensureCorrectUser, async (req, res, next ) => {
     try {
         const username = req.params.username
         const validation = validate(req.body, userUpdateSchmea)
@@ -66,7 +72,7 @@ router.patch('/:username', async (req, res, next ) => {
     }
 })
 
-router.delete('/:username', async (req, res, next ) => {
+router.delete('/:username', ensureCorrectUser, async (req, res, next ) => {
     try {
        await User.delete(req.params.username)
        return res.json({message: "User deleted"})
