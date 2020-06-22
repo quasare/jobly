@@ -83,8 +83,6 @@ describe('Test jobs routes', () => {
 
     })
 
-
-
     afterAll(async function () {
         await db.end();
     })
