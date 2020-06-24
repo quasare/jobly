@@ -44,7 +44,7 @@ class User {
     }
 
     static async get(username){
-        let user = await db.query(`SELECT username, first_name, last_name, email, photo_url FROM users AS u WHERE u.username = $1`, 
+        let user = await db.query(`SELECT username, first_name, last_name, email, photo_url, is_admin FROM users AS u WHERE u.username = $1`, 
         [username])
         return user.rows[0]
     }

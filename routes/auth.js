@@ -12,8 +12,11 @@ const jwt = require("jsonwebtoken");
 router.post("/login", async function (req, res, next) {
     try {
       let {username, password} = req.body;
+      
       if (await User.authenticate(username, password)) {
-      let token = jwt.sign({username}, SECRET_KEY);
+      let {is_admin} = await User.get(username)  
+      
+      let token = jwt.sign({username: username, is_admin: is_admin}, SECRET_KEY);
         return res.json({token});
       } else {
         throw new ExpressError("Invalid username/password", 400);

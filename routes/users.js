@@ -14,7 +14,7 @@ const userUpdateSchmea = require('../schemas/jobUpdate.json')
 const User = require('../models/user');
 const db = require('../db');
 
-const {ensureLoggedIn, ensureCorrectUser} = require('../middleware/auth');
+const {ensureCorrectUser} = require('../middleware/auth');
 const { SECRET_KEY } = require('../config');
 
 // Start user routes
@@ -37,7 +37,7 @@ router.post('/', async (req, res, next) => {
     }
 })
 
-router.get('/', ensureLoggedIn, async (req, res, next ) => {
+router.get('/', async (req, res, next ) => {
     try {
         const allUsers = await User.getAll()
         return res.json({users: allUsers})

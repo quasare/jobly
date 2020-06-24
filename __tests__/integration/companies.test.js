@@ -5,41 +5,18 @@ const Company = require("../../models/company");
 const Job = require("../../models/job")
 const db = require("../../db");
 
+const {testConstants, afterAllHook, afterEachHook, beforeEachHook} = require('./config')
+
 
 describe('Company Routes Test', () => {
     beforeEach(async () => {
-        await db.query("DELETE FROM companies");
-        await db.query("DELETE FROM jobs");
-        let testCompany = await Company.create({
-            handle: "tst",
-            name: "test",
-            num_employees: 55,
-            description: 'Test company',
-            logo_url: 'testurl'
-        })
-        let testCompany2 = await Company.create({
-            "handle": "Pep",
-            "name": "Pepsi",
-            "num_employees": 555,
-            "description": "Drink maker",
-            "logo_url": "ewofijwe"
-        })
-        let testJob = await Job.create({
-            "title": "testTitle",
-            "salary": 20000,
-            "equity": 0.10,
-            "company_handle": "tst"
-        })
-        let testJob2 = await Job.create({
-            "title": "testTitle2",
-            "salary": 20000,
-            "equity": 0.10,
-            "company_handle": "Pep"
-        })
+        await beforeEachHook(testConstants)
     })
 
     test('Can get companies', async () => {
-        let res = await request(app).get('/companies')
+        let res = await request(app).get('/companies').send({
+            "_token": testConstants.userToken
+        })
         expect(res.body).toEqual({
             companies: [{
                     "handle": "tst",
@@ -55,6 +32,7 @@ describe('Company Routes Test', () => {
 
     test('Can create company', async () => {
         let res = await request(app).post('/companies').send({
+            "_token": testConstants.userToken,
             "handle": "CC",
             "name": "Coca Cola",
             "num_employees": 555,
@@ -74,10 +52,9 @@ describe('Company Routes Test', () => {
     })
 
     test("Can get company by handle", async () => {
-        let res = await request(app).get('/companies/tst')
-        console.log(
-            res.body
-        );
+        let res = await request(app).get('/companies/tst').send({
+            "_token": testConstants.userToken
+        })
 
         expect(res.body).toEqual({
             company: {
@@ -100,6 +77,7 @@ describe('Company Routes Test', () => {
 
     test('Can update company', async () => {
         let res = await request(app).patch('/companies/tst').send({
+            "_token": testConstants.userToken,
             handle: 'tst',
             name: 'testuser'
         })
@@ -117,14 +95,20 @@ describe('Company Routes Test', () => {
 
     test('Can delete user', async () => {
 
-        let res = await request(app).delete('/companies/Pep')
+        let res = await request(app).delete('/companies/Pep').send({
+            "_token": testConstants.userToken
+        })
 
         expect(res.body).toEqual({
             message: "Company Deleted"
         })
     })
 
-    afterAll(async function () {
-        await db.end();
+    afterEachHook(async () =>  {
+        await afterEachHook();
+    })
+
+    afterAll(async () =>   {
+        await afterAllHook()
     })
 });

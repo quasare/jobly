@@ -7,18 +7,13 @@ const User = require('../../models/user')
 
 const db = require("../../db")
 
+const {testConstants, afterAllHook, afterEachHook, beforeEachHook} = require('./config')
+
 describe('Test User routes', () => {
     beforeEach(async () => {
-        await db.query("DELETE FROM users")
-        let testUser = await User.create({
-            "username": "testuser",
-            "password": 'test123',
-            "first_name": "joe",
-            "last_name": "test",
-            "email": "test@test.com",
-            "photo_url": 'test@url.com',
-            "is_admin": false
-        })
+        await beforeEachHook(testConstants)
+        
+        
     })
 
     test("Get all users", async () => {
@@ -42,6 +37,7 @@ describe('Test User routes', () => {
                 "last_name": "test",
                 "email": "test@test.com",
                 "photo_url": 'test@url.com',
+                "is_admin": true
             }
         })
     })
@@ -59,12 +55,14 @@ describe('Test User routes', () => {
             }
         )
         expect(res.body).toEqual({
-            user: {username: "testuser2"}
+            token: expect.any(String)
         })
     })
 
+
     test("Update user", async () => {
         let res = await request(app).patch('/users/testuser').send({
+            "_token": testConstants.userToken,
             first_name: 'Eric'
         })
         expect(res.body).toEqual({
@@ -79,13 +77,21 @@ describe('Test User routes', () => {
     })
 
     test("Delete user", async () => {
-        let res = await request(app).delete('/users/testuser2')
+        let res = await request(app).delete('/users/testuser').send({
+            "_token": testConstants.userToken
+        })
         expect(res.body).toEqual({
+            
             message: "User deleted"
         })
     })
-    afterAll(async function () {
-        await db.end();
+
+    afterEachHook(async () =>  {
+        await afterEachHook();
+    })
+
+    afterAll(async () =>   {
+        await afterAllHook()
     })
 
 });

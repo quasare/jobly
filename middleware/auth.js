@@ -52,9 +52,7 @@ function ensureCorrectUser(req, res, next) {
 
 // Middleware: requiers admin to be true
 const ensureIsAdmin = (req, res, next) => {
-  try {
-    console.log(req.user);
-    
+  try {  
     if (req.user.is_admin) {
       return next()
     } else {
