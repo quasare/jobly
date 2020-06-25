@@ -6,15 +6,18 @@ const {
     validate
 } = require("jsonschema");
 
+//// Json schemas to validate against
 const jobNewSchema = require("../schemas/jobNew.json")
 const jobUpdateSchema = require("../schemas/jobUpdate.json")
 
 const ExpressError = require('../helpers/expressError');
 
+// Auth middleware import
 const {ensureLoggedIn, ensureIsAdmin} = require('../middleware/auth')
 
+// Job model import
 const Job = require('../models/job');
-const Company = require('../models/company');
+
 
 // Start routes
 router.get('/', ensureLoggedIn, async (req, res, next) => {
@@ -28,6 +31,7 @@ router.get('/', ensureLoggedIn, async (req, res, next) => {
     }
 })
 
+// Create job 
 router.post('/', ensureIsAdmin, async (req, res, next) => {
     try {
         let validation = validate(req.body, jobNewSchema)
@@ -46,6 +50,7 @@ router.post('/', ensureIsAdmin, async (req, res, next) => {
     }
 })
 
+// Get job by ID
 router.get('/:id', ensureLoggedIn, async (req, res, next) => {
     try {
         id = req.params.id
@@ -58,7 +63,7 @@ router.get('/:id', ensureLoggedIn, async (req, res, next) => {
     }
 })
 
-
+// Update single job
 router.patch('/:id', ensureIsAdmin, async (req, res, next) => {
     try {
         const id = req.params.id
@@ -77,7 +82,7 @@ router.patch('/:id', ensureIsAdmin, async (req, res, next) => {
 })
 
 
-
+// Delete job
 router.delete('/:id', ensureIsAdmin, async (req, res, next) => {
     try {
         id = req.params.id

@@ -7,8 +7,8 @@ const ExpressError = require("../helpers/expressError");
 
 const jwt = require("jsonwebtoken");
 
-/** login: {username, password} => {token} */
 
+// Login user route
 router.post("/login", async function (req, res, next) {
     try {
       let {username, password} = req.body;

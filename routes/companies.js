@@ -4,7 +4,7 @@ const router = new Router();
 // Json Schema validtor
 const {validate} = require("jsonschema");
 
-// Json schemas
+// Json schemas to validate against
 const companySchema = require("../schemas/company.json")
 const companyUpdateSchema = require("../schemas/companyUpdate.json")
 
@@ -13,10 +13,13 @@ const ExpressError = require('../helpers/expressError');
 // Company model 
 const Company = require('../models/company');
 
+// Auth login
 const {ensureLoggedIn, ensureIsAdmin} = require('../middleware/auth')
 
 
 // Start routes
+
+// Get all companies route
 router.get('/', ensureLoggedIn, async (req, res, next) => {
 	try {
 		let companies = await Company.getAll();
@@ -28,6 +31,8 @@ router.get('/', ensureLoggedIn, async (req, res, next) => {
 	}
 });
 
+
+// Create company route
 router.post('/', ensureIsAdmin, async (req, res, next) => {
 	try {
 		const validation = validate(req.body, companySchema)
@@ -46,6 +51,8 @@ router.post('/', ensureIsAdmin, async (req, res, next) => {
 	}
 });
 
+
+// Get company by handle
 router.get('/:handle', ensureLoggedIn, async (req, res, next) => {
 	try {
 		const handle = req.params.handle;
@@ -58,6 +65,7 @@ router.get('/:handle', ensureLoggedIn, async (req, res, next) => {
 	}
 });
 
+// Update company
 router.patch('/:handle', ensureIsAdmin, async (req, res, next) => {
 	try {
 		let update = req.body
@@ -76,6 +84,7 @@ router.patch('/:handle', ensureIsAdmin, async (req, res, next) => {
 	}
 });
 
+// Delete company
 router.delete('/:handle', ensureIsAdmin, async (req, res, next) => {
 	try {
 		handle = req.params.handle

@@ -8,17 +8,18 @@ const {
     validate
 } = require("jsonschema");
 
+// Json schemas to validate against
 const userNewSchmea = require('../schemas/userNew.json')
 const userUpdateSchmea = require('../schemas/jobUpdate.json')
 
+// User model
 const User = require('../models/user');
-const db = require('../db');
 
+// Auth middleware
 const {ensureCorrectUser} = require('../middleware/auth');
 const { SECRET_KEY } = require('../config');
 
 // Start user routes
-
 router.post('/', async (req, res, next) => {
     try {
         const validation = validate(req.body, userNewSchmea)
@@ -37,6 +38,7 @@ router.post('/', async (req, res, next) => {
     }
 })
 
+// Get all users
 router.get('/', async (req, res, next ) => {
     try {
         const allUsers = await User.getAll()
@@ -46,6 +48,7 @@ router.get('/', async (req, res, next ) => {
     }
 })
 
+// Get user by username
 router.get('/:username',  async (req, res, next ) => {
     try {
         const user = await User.get(req.params.username)
@@ -55,6 +58,7 @@ router.get('/:username',  async (req, res, next ) => {
     }
 })
 
+// Update user by username
 router.patch('/:username', ensureCorrectUser, async (req, res, next ) => {
     try {
         const username = req.params.username
@@ -72,6 +76,7 @@ router.patch('/:username', ensureCorrectUser, async (req, res, next ) => {
     }
 })
 
+// Delete user
 router.delete('/:username', ensureCorrectUser, async (req, res, next ) => {
     try {
        await User.delete(req.params.username)

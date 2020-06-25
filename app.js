@@ -14,12 +14,16 @@ app.use(express.json());
 // add logging system
 app.use(morgan("tiny"));
 
+// Routes imported for app
 const companyRoutes = require("./routes/companies")
 const jobRoutes = require("./routes/jobs")
 const userRoutes = require("./routes/users")
 const authRoutes = require("./routes/auth")
 
+// Initilize auth for entire app
 app.use(authenticateJWT)
+
+// Initialize routes in app
 app.use('/companies', companyRoutes);
 app.use('/jobs', jobRoutes);
 app.use('/users', userRoutes);

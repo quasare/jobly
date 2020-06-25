@@ -4,6 +4,7 @@ const partialUpdate = require("../helpers/partialUpdate")
 
 class Job {
 
+    // Create job
     static async create({
         title,
         salary,
@@ -23,22 +24,26 @@ class Job {
         return result.rows[0]
     }
 
+    // Get all jobs from db
     static async getAll() {
         const result = await db.query(`SELECT title, company_handle FROM jobs`)
         return result.rows
     }
 
+    // Get job by id
     static async getById(id){
         const result = await db.query(`SELECT * FROM jobs WHERE jobs.id = $1 `, [id])
         return result.rows[0]
     }
 
+    // Update job
     static async update(data, id){
         const {query, values} = partialUpdate('jobs', data, "id", id)
         const udpateJob = await db.query(`${query}`, values)
         return udpateJob.rows[0]
     }
 
+    // Delete job
     static async delete(id){
         const response = db.query(`DELETE FROM jobs WHERE jobs.id = $1`, [id])
     }

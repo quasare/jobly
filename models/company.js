@@ -1,3 +1,4 @@
+// Company DB
 const db = require("../db")
 const ExpressError = require("../helpers/expressError")
 const partialUpdate = require("../helpers/partialUpdate")
@@ -5,6 +6,7 @@ const partialUpdate = require("../helpers/partialUpdate")
 // Company class
 class Company {
 
+    // Create/register user method
     static async create({
         handle,
         name,
@@ -25,12 +27,14 @@ class Company {
         return result.rows[0]
     }
 
+    // Get all users methods
     static async getAll() {
         const result = await db.query(`
         SELECT handle, name FROM companies;`)
         return result.rows
     }
 
+    // Get by handle method
     static async get(handle) {
         const res = await db.query(`
             SELECT * FROM companies AS c WHERE c.handle = $1
@@ -44,6 +48,7 @@ class Company {
         return company
     }
 
+    // Update company in db
     static async update(data, handle){
         const {query, values} = partialUpdate('companies', data, "handle",handle)
         
@@ -51,6 +56,7 @@ class Company {
         return updatedCompany.rows[0]
     }
 
+    // Delete company
     static async delete(handle){
         const company = await db.query(`
         DELETE FROM companies AS c WHERE c.handle = $1 `, [handle])
