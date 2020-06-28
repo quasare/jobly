@@ -1,3 +1,4 @@
+/c Jobly 
 CREATE TABLE companies
 (
     handle text PRIMARY KEY,
