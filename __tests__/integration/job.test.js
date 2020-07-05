@@ -17,7 +17,6 @@ const {
 
 describe('Test jobs routes', () => {
     beforeEach(async () => {
-
         await beforeEachHook(testConstants)
     })
 
@@ -92,7 +91,7 @@ describe('Test jobs routes', () => {
 
     })
 
-    afterEachHook(async () =>  {
+    afterEach(async () =>  {
         await afterEachHook();
     })
 

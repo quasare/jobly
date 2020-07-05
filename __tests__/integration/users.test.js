@@ -11,6 +11,7 @@ const {testConstants, afterAllHook, afterEachHook, beforeEachHook} = require('./
 
 describe('Test User routes', () => {
     beforeEach(async () => {
+
         await beforeEachHook(testConstants)
         
         
@@ -86,7 +87,7 @@ describe('Test User routes', () => {
         })
     })
 
-    afterEachHook(async () =>  {
+    afterEach(async () =>  {
         await afterEachHook();
     })
 

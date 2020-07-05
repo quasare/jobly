@@ -18,7 +18,7 @@ const beforeEachHook = async (testConstants) => {
     await db.query("DELETE FROM companies")
     await db.query('DELETE FROM jobs')
     await db.query('DELETE FROM users')
-
+    console.log('running');
 
 
     const hashedPassword = await bcrypt.hash('test123', 1);

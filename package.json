@@ -4,9 +4,9 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --runInBand",
     "start": "node server.js",
-    "test-seq": "jest --runInBand"
+    
   },
   "jest": {
     "testPathIgnorePatterns": [
@@ -27,5 +27,10 @@
     "morgan": "^1.10.0",
     "pg": "^8.2.1",
     "supertest": "^4.0.2"
+  },
+  "devDependencies": {
+    "eslint": "^7.4.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.0"
   }
 }

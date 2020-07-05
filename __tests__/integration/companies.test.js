@@ -10,6 +10,9 @@ const {testConstants, afterAllHook, afterEachHook, beforeEachHook} = require('./
 
 describe('Company Routes Test', () => {
     beforeEach(async () => {
+        await db.query('DELETE FROM jobs');
+        await db.query('DELETE FROM users');
+        await db.query('DELETE FROM companies');
         await beforeEachHook(testConstants)
     })
 
@@ -104,7 +107,7 @@ describe('Company Routes Test', () => {
         })
     })
 
-    afterEachHook(async () =>  {
+    afterEach(async () =>  {
         await afterEachHook();
     })
 
