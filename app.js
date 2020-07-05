@@ -1,5 +1,4 @@
 /** Express app for jobly. */
-
 const express = require('express');
 
 const morgan = require('morgan');
