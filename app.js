@@ -1,38 +1,40 @@
 /** Express app for jobly. */
 
-const express = require("express");
+const express = require('express');
 
-const ExpressError = require("./helpers/expressError");
-
-const morgan = require("morgan");
-const {authenticateJWT} = require('./middleware/auth')
+const morgan = require('morgan');
+const {
+  authenticateJWT,
+} = require('./middleware/auth');
 
 const app = express();
 
 app.use(express.json());
 
 // add logging system
-app.use(morgan("tiny"));
+app.use(morgan('tiny'));
+
+const ExpressError = require('./helpers/expressError');
 
 // Routes imported for app
-const companyRoutes = require("./routes/companies")
-const jobRoutes = require("./routes/jobs")
-const userRoutes = require("./routes/users")
-const authRoutes = require("./routes/auth")
+const companyRoutes = require('./routes/companies');
+const jobRoutes = require('./routes/jobs');
+const userRoutes = require('./routes/users');
+const authRoutes = require('./routes/auth');
 
 // Initilize auth for entire app
-app.use(authenticateJWT)
+app.use(authenticateJWT);
 
 // Initialize routes in app
 app.use('/companies', companyRoutes);
 app.use('/jobs', jobRoutes);
 app.use('/users', userRoutes);
-app.use('/', authRoutes)
+app.use('/', authRoutes);
 
 /** 404 handler */
 
-app.use(function (req, res, next) {
-  const err = new ExpressError("Not Found", 404);
+app.use((req, res, next) => {
+  const err = new ExpressError('Not Found', 404);
 
   // pass the error to the next piece of middleware
   return next(err);
@@ -40,13 +42,13 @@ app.use(function (req, res, next) {
 
 /** general error handler */
 
-app.use(function (err, req, res, next) {
+app.use((err, req, res, next) => {
   res.status(err.status || 500);
   console.error(err.stack);
 
   return res.json({
     status: err.status,
-    message: err.message
+    message: err.message,
   });
 });
 
